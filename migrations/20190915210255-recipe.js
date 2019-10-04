@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('recipe', {
-    id: { type: 'int', primaryKey: true },
+    //id: { type: 'int', primaryKey: true,  autoincrement: true  },
     name: 'string',
     image: 'string',
     is_tech: 'BOOLEAN'

@@ -16,7 +16,6 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('recipe_ingredient_join', {
-    id: { type: 'int', primaryKey: true },
     ingredient_id: 'int',
     recipe_id: 'int'
   });
