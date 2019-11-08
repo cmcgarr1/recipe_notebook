@@ -1,6 +1,6 @@
 import express from "express";
 import * as path from 'path';
-import {add_ingredient, get_all, get_by_id} from './backend/ingredient_controller'
+import {add_ingredient, get_all, get_by_id, udpate_ingredient} from './backend/ingredient_controller'
 console.log(express)
 
 const app = express();
@@ -15,9 +15,16 @@ app.get('/heartbeat', (req, res) => {
     console.log('Sent list of items');
 });
 
-// Handles any requests that don't match the ones above
+// Ingredient Routes
+
+app.put('/ingredients/:ingredient_id', async (req,res) =>{
+    console.log(req)
+    const response = await udpate_ingredient(req.body, req.params.ingredient_id)
+    res.json(response)
+});
 
 app.post('/ingredients', async (req,res) =>{
+    console.log(req)
     const response = await add_ingredient(req.body)
     res.json(response)
 });
@@ -32,6 +39,7 @@ app.get('/ingredients/:ingredient_id', async (req,res) =>{
     res.json(response)
 } )
 
+// Handles any requests that don't match the ones above
 // Stay at the bottoms
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
