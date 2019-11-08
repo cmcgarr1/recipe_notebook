@@ -58,3 +58,24 @@ export const get_by_id= async (params) => {
         return res
     }
 }
+
+export const udpate_ingredient= async (params, ingredient_id) => {
+    const name = params.name
+    if (name === null){
+        return {}
+    }
+
+    const query= `UPDATE ingredients SET name = '${name}' WHERE id = ${ingredient_id};`
+    console.log(query)
+    console.log(params)
+    let res={}
+    try {
+        const response = await client.query(query)
+        console.log(response)
+        res= response.rows[0]
+    }catch (err) {
+        console.log(err.stack)
+    }finally{
+        return res
+    }
+}
