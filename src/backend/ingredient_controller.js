@@ -1,81 +1,71 @@
-
-const { Client } = require('pg')
-const client = new Client()
+import { knex } from "./knex";
 
 //const res = await client.query('SELECT $1::text as message', ['Hello world!'])
 //console.log(res.rows[0].message) // Hello world!
 
-client.connect()
+export const add_ingredient = async params => {
+  const name = params.name;
+  if (name === null) {
+    return {};
+  }
 
-export const add_ingredient = async (params) => {
-    const name = params.name
-    if (name === null){
-        return {}
-    }
-
-
-    const query= 'INSERT INTO ingredients(name) VALUES($1) RETURNING *'
-    const values= [name]
-
-    let res={}
-    try {
-        const response = await client.query(query, values)
-        console.log(response.rows[0])
-        res=response.rows[0]
-      } catch (err) {
-        console.log(err.stack)
-      } finally{
-        return res
-      }  
-}
+  let res = {};
+  try {
+    const response = await knex("ingredients").insert({ name });
+    res = "OK";
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    return res;
+  }
+};
 
 export const get_all = async () => {
+  let res = {};
+  try {
+    res = await knex.select().table("ingredients");
+    console.log(res);
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    return res;
+  }
+};
 
-    const query= 'SELECT * FROM ingredients;'
-    let res={}
-    try {
-        const response = await client.query(query)
-        console.log(response)
-        res= response.rows
-    }catch (err) {
-        console.log(err.stack)
-    }finally{
-        return res
-    }
-}
+export const get_by_id = async params => {
+  let res = {};
+  try {
+    const response = await knex("ingredients").where({
+      id: params.ingredient_id
+    });
+    console.log(response);
+    res = response[0];
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    return res;
+  }
+};
 
-export const get_by_id= async (params) => {
+export const udpate_ingredient = async (params, ingredient_id) => {
+  const name = params.name;
+  if (name === null) {
+    return {};
+  }
 
-    const query= `SELECT * FROM ingredients where id=${params.ingredient_id};`
-    let res={}
-    try {
-        const response = await client.query(query)
-        console.log(response)
-        res= response.rows[0]
-    }catch (err) {
-        console.log(err.stack)
-    }finally{
-        return res
-    }
-}
-
-export const udpate_ingredient= async (params, ingredient_id) => {
-    const name = params.name
-    if (name === null){
-        return {}
-    }
-
-    const query= `UPDATE ingredients SET name = '${name}' WHERE id = ${ingredient_id};`
-    console.log(query)
-    console.log(params)
-    let res={}
-    try {
-        const response = await client.query(query)
-        console.log(response)
-        res= response.rows[0]
-    }catch (err) {
-        console.log(err.stack)
-    }finally{
-        return res
-    }
-}
+  console.log(params);
+  let res = {};
+  try {
+    const response = await knex("users")
+      .where({
+        id: ingredient_id
+      })
+      .update({ name });
+    console.log(response);
+    res = response[0];
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    return res;
+  }
+};
