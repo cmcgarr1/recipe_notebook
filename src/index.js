@@ -31,6 +31,11 @@ app.post("/ingredients", async (req, res) => {
   const response = await add_ingredient(req.body);
   res.json(response);
 });
+// Handles any requests that don't match the ones above
+// Stay at the bottoms
+app.get("/ingredients/new", (req, res) => {
+  res.sendFile(path.join(__dirname + "/frontend/ingredients/new.html"));
+});
 
 app.get("/ingredients", async (req, res) => {
   const response = await get_all();
@@ -44,8 +49,8 @@ app.get("/ingredients/:ingredient_id", async (req, res) => {
 
 // Handles any requests that don't match the ones above
 // Stay at the bottoms
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+app.get("/ingredients/new", (req, res) => {
+  res.sendFile(path.join(__dirname + "/frontend/ingredients/new.html"));
 });
 
 const port = process.env.PORT || 5000;

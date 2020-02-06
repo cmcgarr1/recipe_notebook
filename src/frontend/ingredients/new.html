@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title of the document</title>
+  </head>
+
+  <body>
+    <h2>
+      Add an Ingredient
+    </h2>
+    <form class="AddIngredient" method="post">
+      <label for="name"> Name </label>
+      <input type="text" class="name" />
+
+      <input type="submit" />
+    </form>
+    <div
+      hidden="true"
+      class="success"
+      style="background-color: green; color: white;"
+    >
+      You have successfully added an ingredient
+    </div>
+    <script>
+      const AddIngredient = document.querySelector(".AddIngredient");
+      AddIngredient.addEventListener("submit", e => {
+        e.preventDefault();
+        const name = AddIngredient.querySelector(".name").value;
+        post("/ingredients", { name }).then(() => {
+          AddIngredient.querySelector(".name").value = "";
+          const success = document.querySelector(".success");
+          success.hidden = false;
+          setTimeout(() => {
+            const success = document.querySelector(".success");
+            success.hidden = true;
+          }, 3000);
+        });
+      });
+
+      function post(path, data) {
+        return window.fetch(path, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+      }
+    </script>
+  </body>
+</html>
